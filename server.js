@@ -3,19 +3,20 @@ import mongoose from "mongoose";
 import cors from "cors";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
-
+import dotenv from "dotenv"
+dotenv.config();
 const SECRET="mysecret123"
 
-
+const PORT=process.env.PORT || 8081
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.listen(8081, () => {
+app.listen(PORT, () => {
   console.log("Server started");
 });
 
-mongoose.connect("mongodb://localhost:27017/mytestdb1")
+mongoose.connect(process.env.MONGO_URI)
 
 const userSchema = new mongoose.Schema({
   name:String,
