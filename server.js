@@ -83,11 +83,19 @@ const authenticate=async (req,res,next)=>{
     catch(error){
 res.json({message:"Unauthorized"})
     }
-  
-
 }
 
-app.get("/users", authenticate,async (req, res) => {
+const authorize=(...roles)=>{
+    return (req,res,next)=>{
+        if(roles.includes(req.user.role)){
+            next()
+        }else{
+            res.json({message:"Access Denied"})
+        }
+    }
+}
+
+app.get("/users", authenticate,authorize("admin"),async (req, res) => {
     const users = await userModel.find();
     res.json(users);
 });
